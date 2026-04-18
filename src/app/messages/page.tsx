@@ -3,10 +3,6 @@ import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-<<<<<<< HEAD
-import { Suspense } from 'react';
-=======
->>>>>>> dcde720 (Fix duplicate Suspense import in messages page)
 
 const COLORS: Record<string, string> = {
     u1: '#6C63FF', u2: '#38bdf8', u3: '#f472b6', u4: '#ffa116',
