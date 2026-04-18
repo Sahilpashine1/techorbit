@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+# techorbit
+=======
+>>>>>>> dcde720 (Fix duplicate Suspense import in messages page)
 # TechOrbit 🚀
 
 **India's Smartest AI-Powered Tech Career Platform**
@@ -56,3 +62,7 @@ TechOrbit is a comprehensive career intelligence platform designed for developer
 
 ## 🌐 Deployment
 Ready for Vercel. Ensure `pdf-parse` is added to `serverExternalPackages` in `next.config.ts`, deploy your project, and add your custom domains.
+<<<<<<< HEAD
+=======
+>>>>>>> c8ce6d2 (my first push)
+>>>>>>> dcde720 (Fix duplicate Suspense import in messages page)
