@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import pdfParseRaw from 'pdf-parse';
 
 export const runtime = 'nodejs';
 
@@ -22,14 +21,33 @@ export async function POST(req: NextRequest) {
             (globalThis as any).DOMMatrix = class DOMMatrix {};
         }
 
-        const PDFParse = (pdfParseRaw as any).PDFParse || pdfParseRaw;
-        
+        const pdfParseRaw = require('pdf-parse');
+        let PDFParse = pdfParseRaw;
+
         if (!PDFParse || typeof PDFParse !== 'function') {
-            throw new Error(`PDFParse class not found. Keys available: ${Object.keys(pdfParseRaw).join(', ')}`);
+            if (pdfParseRaw && typeof (pdfParseRaw as any).default === 'function') {
+                PDFParse = (pdfParseRaw as any).default;
+            } else if (pdfParseRaw && typeof (pdfParseRaw as any).PDFParse === 'function') {
+                PDFParse = (pdfParseRaw as any).PDFParse;
+            } else {
+                throw new Error(`PDFParse not found. Type: ${typeof pdfParseRaw}, Keys: ${pdfParseRaw ? Object.keys(pdfParseRaw).join(',') : 'null'}`);
+            }
         }
 
-        const parser = new PDFParse({ data: buffer });
-        const pdfData = await parser.getText();
+        console.log("PDFParse type:", typeof PDFParse, "is class?", PDFParse.toString().startsWith('class'));
+        let pdfData;
+        try {
+            pdfData = await PDFParse(buffer);
+        } catch (e: any) {
+            console.error("Error executing without new:", e.message);
+            // Try with new if it's a class
+            if (e.message.includes('without \'new\'') || e.message.includes('Class constructor')) {
+                pdfData = await new (PDFParse as any)(buffer);
+            } else {
+                throw e;
+            }
+        }
+        
         const resumeText = pdfData.text || '';
 
         // Advanced Intelligent Rules Engine (Local Fallback)
