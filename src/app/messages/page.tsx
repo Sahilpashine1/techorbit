@@ -254,8 +254,8 @@ function MessagesContent() {
                                 <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 20, lineHeight: 1.6 }}>
                                     Follow people or click the <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{display:'inline', verticalAlign:'middle'}}><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg> button to start a chat
                                 </p>
-                                <Link href="/people" style={{ display: 'inline-block', padding: '9px 22px', borderRadius: 'var(--radius-full)', background: 'var(--accent-primary)', color: 'white', textDecoration: 'none', fontWeight: 700, fontSize: 13, boxShadow: '0 4px 14px rgba(108,99,255,0.3)' }}>
-                                    Discover People →
+                                <Link href="/network" style={{ display: 'inline-block', padding: '9px 22px', borderRadius: 'var(--radius-full)', background: 'var(--accent-primary)', color: 'white', textDecoration: 'none', fontWeight: 700, fontSize: 13, boxShadow: '0 4px 14px rgba(108,99,255,0.3)' }}>
+                                    Discover Network →
                                 </Link>
                             </div>
                         ) : sortedContacts.map(id => {

@@ -12,7 +12,6 @@ const navLinks = [
     { href: '/resume-analyzer', label: 'Resume' },
     { href: '/news', label: 'News' },
     { href: '/certifications', label: 'Certifications' },
-    { href: '/people', label: 'People' },
     { href: '/network', label: 'Network' },
 ];
 

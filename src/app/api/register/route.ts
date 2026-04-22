@@ -3,12 +3,13 @@ import bcrypt from 'bcryptjs';
 
 // Dynamic import to avoid build-time connection
 async function getUser() {
-    const { default: mongoose } = await import('mongoose');
     const MONGODB_URI = process.env.MONGODB_URI || '';
 
-    if (!MONGODB_URI || MONGODB_URI.includes('username:password')) {
+    if (!MONGODB_URI || MONGODB_URI.includes('username:password') || MONGODB_URI.includes('mock_uri')) {
         return null; // MongoDB not configured
     }
+
+    const { default: mongoose } = await import('mongoose');
 
     if (mongoose.connection.readyState === 0) {
         await mongoose.connect(MONGODB_URI);
@@ -41,28 +42,28 @@ export async function POST(req: NextRequest) {
 
         // Try to use MongoDB if configured
         const User = await getUser();
-        if (User) {
-            const existing = await User.findOne({ email: email.toLowerCase() });
-            if (existing) {
-                return NextResponse.json({ error: 'An account with this email already exists.' }, { status: 409 });
-            }
-            const hashed = await bcrypt.hash(password, 12);
-            await User.create({
-                name,
-                email: email.toLowerCase(),
-                password: hashed,
-                role: role || 'user',
-                companyName: companyName || null,
+        if (!User) {
+            // MongoDB not configured — return success with a demo message
+            return NextResponse.json({
+                success: true,
+                message: 'Account created successfully! (Demo mode)',
+                demo: true,
             });
-            return NextResponse.json({ success: true, message: 'Account created! You can now sign in.' });
         }
-
-        // MongoDB not configured — return success with a demo message
-        return NextResponse.json({
-            success: true,
-            message: 'Account created successfully! (Demo mode - connect MongoDB for persistent storage)',
-            demo: true,
+        
+        const existing = await User.findOne({ email: email.toLowerCase() });
+        if (existing) {
+            return NextResponse.json({ error: 'An account with this email already exists.' }, { status: 409 });
+        }
+        const hashed = await bcrypt.hash(password, 12);
+        await User.create({
+            name,
+            email: email.toLowerCase(),
+            password: hashed,
+            role: role || 'user',
+            companyName: companyName || null,
         });
+        return NextResponse.json({ success: true, message: 'Account created! You can now sign in.' });
 
     } catch (err: any) {
         if (err.code === 11000) {

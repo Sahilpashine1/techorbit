@@ -142,7 +142,7 @@ function OtherUserProfile({ userId, onBack }: { userId: string; onBack: () => vo
 
             <div className="container" style={{ maxWidth: 780, position: 'relative', zIndex: 1 }}>
                 <button onClick={onBack} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', fontSize: 14, fontWeight: 600, marginBottom: 24, padding: 0 }}>
-                    ← Back to People
+                    ← Back to Network
                 </button>
 
                 {/* Header Card */}
@@ -410,7 +410,7 @@ function ProfileContent() {
                                     <div style={{ textAlign: 'center', padding: '40px 20px' }}>
                                         <div style={{ fontSize: 40, marginBottom: 12 }}>👥</div>
                                         <p style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>Not following anyone yet</p>
-                                        <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>Go to People to follow professionals</p>
+                                        <p style={{ fontSize: 13, color: 'var(--text-muted)' }}>Go to Network to follow professionals</p>
                                     </div>
                                 ) : followingList.map(p => {
                                     const c = COLORS_MAP[p.id] || '#6C63FF';
@@ -630,7 +630,7 @@ function ProfileContent() {
                                         { href: '/career-guidance', label: 'AI Resume', icon: '📄', color: '#6C63FF' },
                                         { href: '/jobs', label: 'Browse Jobs', icon: '💼', color: '#38bdf8' },
                                         { href: '/certifications', label: 'Certs', icon: '🎓', color: '#FFA116' },
-                                        { href: '/people', label: 'People', icon: '👥', color: '#22c55e' },
+                                        { href: '/network', label: 'Network', icon: '👥', color: '#22c55e' },
                                         { href: '/news', label: 'Tech News', icon: '📰', color: '#f472b6' },
                                         { href: '/settings', label: 'Settings', icon: '⚙️', color: '#94a3b8' },
                                     ].map(item => (

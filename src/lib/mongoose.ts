@@ -1,12 +1,6 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI || "mock_uri_for_build_purposes";
-
-if (!MONGODB_URI) {
-    throw new Error(
-        'Please define the MONGODB_URI environment variable inside .env.local'
-    );
-}
+const MONGODB_URI = process.env.MONGODB_URI || "";
 
 let cached = (global as any).mongoose;
 
@@ -15,6 +9,11 @@ if (!cached) {
 }
 
 async function connectMongo() {
+    if (!MONGODB_URI || MONGODB_URI.includes('username:password') || MONGODB_URI.includes('mock_uri')) {
+        console.warn('MongoDB URI not configured. Running in demo mode.');
+        return null;
+    }
+
     if (cached.conn) {
         return cached.conn;
     }

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import pdfParseRaw from 'pdf-parse';
 
 export const runtime = 'nodejs';
 
@@ -9,6 +10,10 @@ export async function POST(req: NextRequest) {
         
         if (!file) return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
 
+        if (file.type !== 'application/pdf') {
+            return NextResponse.json({ error: 'Only PDF files are currently supported for analysis.' }, { status: 400 });
+        }
+
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
         
@@ -17,8 +22,7 @@ export async function POST(req: NextRequest) {
             (globalThis as any).DOMMatrix = class DOMMatrix {};
         }
 
-        const pdfParseRaw = require('pdf-parse');
-        const PDFParse = pdfParseRaw.PDFParse || pdfParseRaw;
+        const PDFParse = (pdfParseRaw as any).PDFParse || pdfParseRaw;
         
         if (!PDFParse || typeof PDFParse !== 'function') {
             throw new Error(`PDFParse class not found. Keys available: ${Object.keys(pdfParseRaw).join(', ')}`);
@@ -97,7 +101,7 @@ export async function POST(req: NextRequest) {
             certifications: dynamicCerts.slice(0, 3)
         };
 
-        const apiKey = process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY;
+        const apiKey = process.env.GOOGLE_GEMINI_KEY || process.env.OPENAI_API_KEY;
         if (!apiKey) {
             return NextResponse.json(localAIResponse);
         }
@@ -119,7 +123,7 @@ export async function POST(req: NextRequest) {
         `;
 
         try {
-            const externalRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`, {
+            const externalRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GOOGLE_GEMINI_KEY}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })

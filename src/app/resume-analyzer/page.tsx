@@ -188,8 +188,8 @@ export default function ResumeAnalyzerPage() {
     }, []);
 
     const onFile = (file: File) => {
-        if (!['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(file.type)) {
-            setError('Please upload a PDF or Word document.');
+        if (file.type !== 'application/pdf') {
+            setError('Please upload a PDF document.');
             return;
         }
         analyze(file);
